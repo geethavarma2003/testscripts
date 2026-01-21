@@ -3,11 +3,11 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.9   # Ensure Python is available
+      python: 3.9
+
   build:
     commands:
       - echo "Downloading reference code from S3"
       - aws s3 sync s3://testscripts-geetha /tmp/chatgpt
-      - echo "Comparing developer code with reference code"
-      # Run Python script to calculate similarity
+      - echo "Running token-based similarity check"
       - python3 compare_code.py geetha /tmp/chatgpt/geetha.txt
