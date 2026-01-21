@@ -1,12 +1,12 @@
-x = int(input("Enter a number: "))
+x = int(input)
 
 print("Prime numbers up to", x, "are:")
 
-for num in range(2, x + 1):
-    is_prime = True
+for xyz in range(2, x + 1):
+    Satisfy = True
     for g in range(2, num):
-        if num % g == 0:
-            is_prime = False
+        if xyz % g == 0:
+            Satisfy = False
             break
     if is_prime:
-        print(num)
+        print(xyz)
