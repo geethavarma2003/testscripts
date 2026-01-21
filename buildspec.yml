@@ -10,4 +10,5 @@ phases:
       - echo "Downloading reference code from S3"
       - aws s3 sync s3://testscripts-geetha /tmp/chatgpt
       - echo "Running token-based similarity check"
-      - python3 compare_code.py geetha /tmp/chatgpt/geetha.txt
+      - python3 compare_code.py file1.py /tmp/chatgpt/geetha.txt
+
