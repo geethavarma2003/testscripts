@@ -13,7 +13,7 @@ file1 = sys.argv[1]
 file2 = sys.argv[2]
 
 code1 = read_file(file1.py)
-code2 = read_file(file2.py)
+code2 = read_file(file2)
 
 score = similarity(code1, code2)
 
