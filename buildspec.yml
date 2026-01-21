@@ -3,4 +3,19 @@ version: 0.2
 phases:
   build:
     commands:
-      - echo "Hello CodeBuild"
+      - echo "Downloading reference code from S3"
+      - aws s3 sync s3://testscripts-geetha /tmp/chatgpt
+      - |
+          echo "Comparing files"
+          FRONT=$(wc -l < geetha)
+          COMMON=$(grep -Fxf geetha /tmp/chatgpt/geetha.txt | wc -l)
+          PERCENT=$(( COMMON * 100 / FRONT ))
+          echo "Similarity: $PERCENT%"
+          if [ "$PERCENT" -ge 70 ]; then
+            echo "Copied content detected"
+            exit 1
+          else
+            echo "Content is acceptable"
+            exit 0
+          fi
+
