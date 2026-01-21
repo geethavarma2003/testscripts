@@ -1,26 +1,39 @@
 #!/usr/bin/env python3
 import sys
+import tokenize
 from difflib import SequenceMatcher
 
-# Paths to the developer's code and reference code
-developer_file = sys.argv[1]       # e.g., geetha
-reference_file = sys.argv[2]       # e.g., /tmp/chatgpt/geetha.txt
+def extract_tokens(file_path):
+    tokens = []
+    with open(file_path, "rb") as f:
+        for tok in tokenize.tokenize(f.readline):
+            # Ignore comments, newlines, indentation
+            if tok.type in (
+                tokenize.NAME,      # variables, function names
+                tokenize.OP,        # + - * / = == etc
+                tokenize.NUMBER,    # numbers
+                tokenize.STRING,    # strings
+                tokenize.KEYWORD if hasattr(tokenize, "KEYWORD") else tokenize.NAME
+            ):
+                tokens.append(tok.string)
+    return tokens
 
-# Read files
-with open(developer_file, "r") as f:
-    dev_code = f.read()
+# Arguments
+developer_file = sys.argv[1]     # developer code
+reference_file = sys.argv[2]     # reference code from S3
 
-with open(reference_file, "r") as f:
-    ref_code = f.read()
+dev_tokens = extract_tokens(developer_file)
+ref_tokens = extract_tokens(reference_file)
 
-# Calculate similarity (0-100%)
-similarity = SequenceMatcher(None, dev_code.lower(), ref_code.lower()).ratio() * 100
-print(f"Similarity: {similarity:.2f}%")
+# Token similarity
+similarity = SequenceMatcher(None, dev_tokens, ref_tokens).ratio() * 100
 
-# Exit with 1 if similarity is high (copied), else 0
+print(f"Token-based similarity: {similarity:.2f}%")
+
+# Decision
 if similarity >= 70:
-    print("Copied code detected!")
+    print("❌ Copied logic detected")
     sys.exit(1)
 else:
-    print("Code is acceptable")
+    print("✅ Code is acceptable")
     sys.exit(0)
