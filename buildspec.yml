@@ -4,7 +4,7 @@ phases:
   build:
     commands:
       - echo "Downloading reference code from S3"
-      - aws s3 sync s3://testscripts-getha /tmp/chatgpt
+      - aws s3 sync s3://testscripts-geetha /tmp/chatgpt
       - |
           echo "Comparing files"
           FRONT=$(wc -l < geetha)
