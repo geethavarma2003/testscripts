@@ -8,5 +8,5 @@ for xyz in range(2, x + 1):
         if xyz % g == 0:
             Satisfy = False
             break
-    if is_prime:
+    if Satisfy:
         print(xyz)
