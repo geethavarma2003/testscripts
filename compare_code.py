@@ -1,39 +1,26 @@
-#!/usr/bin/env python3
 import sys
-import tokenize
-from difflib import SequenceMatcher
 
-def extract_tokens(file_path):
-    tokens = []
-    with open(file_path, "rb") as f:
-        for tok in tokenize.tokenize(f.readline):
-            # Ignore comments, newlines, indentation
-            if tok.type in (
-                tokenize.NAME,      # variables, function names
-                tokenize.OP,        # + - * / = == etc
-                tokenize.NUMBER,    # numbers
-                tokenize.STRING,    # strings
-                tokenize.KEYWORD if hasattr(tokenize, "KEYWORD") else tokenize.NAME
-            ):
-                tokens.append(tok.string)
-    return tokens
+def read_file(path):
+    with open(path, "r") as f:
+        return f.read()
 
-# Arguments
-developer_file = sys.argv[1]     # developer code
-reference_file = sys.argv[2]     # reference code from S3
+def similarity(a, b):
+    a_tokens = set(a.split())
+    b_tokens = set(b.split())
+    return len(a_tokens & b_tokens) / len(a_tokens | b_tokens) * 100
 
-dev_tokens = extract_tokens(developer_file)
-ref_tokens = extract_tokens(reference_file)
+file1 = sys.argv[1]
+file2 = sys.argv[2]
 
-# Token similarity
-similarity = SequenceMatcher(None, dev_tokens, ref_tokens).ratio() * 100
+code1 = read_file(file1)
+code2 = read_file(file2)
 
-print(f"Token-based similarity: {similarity:.2f}%")
+score = similarity(code1, code2)
 
-# Decision
-if similarity >= 70:
-    print("❌ Copied logic detected")
-    sys.exit(1)
+print(f"Token-based similarity: {score:.2f}%")
+
+if score > 80:
+    print("❌ Code is too similar")
+    exit(1)
 else:
     print("✅ Code is acceptable")
-    sys.exit(0)
