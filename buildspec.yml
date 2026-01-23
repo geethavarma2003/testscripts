@@ -15,4 +15,4 @@ phases:
       - ls -R
 
       - echo "Running token-based similarity check"
-      - python3 compare_code.py src/App.js /tmp/varma.txt
+      - python3 compare_code.py varma/App.js /tmp/varma.txt
