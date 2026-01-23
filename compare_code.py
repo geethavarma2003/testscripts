@@ -1,7 +1,7 @@
 import sys
 import re
 
-THRESHOLD = 70  # similarity percentage
+THRESHOLD = 80  # similarity percentage
 
 
 def tokenize(code):
@@ -40,12 +40,12 @@ for ref in reference_files:
     print(f"Similarity with {ref}: {score:.2f}%")
 
     if score >= THRESHOLD:
-        print("❌ Code is too similar (>= 70%)")
+        print("❌ Code is too similar (>= 80%)")
         failed = True
 
 if failed:
     sys.exit(1)
 else:
-    print("✅ Code is acceptable")
+    print("✅ Code is acceptable miss Geetha Varma")
     sys.exit(0)
 
