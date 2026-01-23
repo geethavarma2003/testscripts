@@ -8,11 +8,13 @@ phases:
   build:
     commands:
       - echo "Downloading reference code from S3"
-      - aws s3 cp s3://testscripts-geetha/varma.txt /tmp/varma.txt
+      - aws s3 cp s3://testscripts-geetha/varma1.txt /tmp/varma1.txt
+      - aws s3 cp s3://testscripts-geetha/varma2.txt /tmp/varma2.txt
+      - aws s3 cp s3://testscripts-geetha/varma3.txt /tmp/varma3.txt
 
       - echo "Listing files for debug"
       - pwd
       - ls -R
 
-      - echo "Running token-based similarity check"
-      - python3 compare_code.py varma /tmp/varma.txt
+      - echo "Running multi-file similarity check"
+      - python3 compare_code.py varma /tmp/varma1.txt /tmp/varma2.txt /tmp/varma3.txt
