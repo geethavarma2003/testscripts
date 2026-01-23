@@ -1,35 +1,51 @@
 import sys
+import re
+
+THRESHOLD = 70  # similarity percentage
+
+
+def tokenize(code):
+    return re.findall(r'\w+', code.lower())
+
+
+def similarity(tokens1, tokens2):
+    set1, set2 = set(tokens1), set(tokens2)
+    if not set1 or not set2:
+        return 0
+    return (len(set1 & set2) / len(set1 | set2)) * 100
+
 
 def read_file(path):
     with open(path, "r", encoding="utf-8") as f:
         return f.read()
 
-def similarity(a, b):
-    a_tokens = set(a.split())
-    b_tokens = set(b.split())
 
-    if not a_tokens or not b_tokens:
-        return 0.0
-
-    return (len(a_tokens & b_tokens) / len(a_tokens | b_tokens)) * 100
-
-if len(sys.argv) != 3:
-    print("Usage: python compare_code.py <repo_file> <s3_file>")
+if len(sys.argv) < 3:
+    print("Usage: python compare_code.py <repo_file> <ref_file1> [ref_file2] ...")
     sys.exit(1)
 
 repo_file = sys.argv[1]
-s3_file = sys.argv[2]
+reference_files = sys.argv[2:]
 
-code1 = read_file(repo_file)
-code2 = read_file(s3_file)
+repo_code = read_file(repo_file)
+repo_tokens = tokenize(repo_code)
 
-score = similarity(code1, code2)
+failed = False
 
-print(f"Token-based similarity: {score:.2f}%")
+for ref in reference_files:
+    ref_code = read_file(ref)
+    ref_tokens = tokenize(ref_code)
 
-if score >= 70:
-    print("❌ Code is too similar (>= 70%)")
-    sys.exit(1)   # FAIL CodeBuild
+    score = similarity(repo_tokens, ref_tokens)
+    print(f"Similarity with {ref}: {score:.2f}%")
+
+    if score >= THRESHOLD:
+        print("❌ Code is too similar (>= 70%)")
+        failed = True
+
+if failed:
+    sys.exit(1)
 else:
-    print("✅ Code is acceptable (< 70%)")
+    print("✅ Code is acceptable")
     sys.exit(0)
+
