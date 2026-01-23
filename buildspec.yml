@@ -17,4 +17,4 @@ phases:
       - ls -R
 
       - echo "Running multi-file similarity check"
-      - python3 compare_code.py varma /tmp/varma1.txt /tmp/varma2.txt /tmp/varma3.txt
+      - python3 compare_code.py varma /tmp/varma.txt /tmp/varma2.txt /tmp/varma3.txt
