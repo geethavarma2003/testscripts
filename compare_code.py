@@ -28,8 +28,10 @@ score = similarity(code1, code2)
 
 print(f"Token-based similarity: {score:.2f}%")
 
-if score >= 80:
-    print("❌ Code is too similar")
+if score >= 70:
+    print("❌ Code is too similar (>= 70%)")
     sys.exit(1)   # FAIL CodeBuild
 else:
-    print("✅ Code is acceptable")
+    print("✅ Code is acceptable (< 70%)")
+    sys.exit(0)
+
