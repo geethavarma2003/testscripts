@@ -9,6 +9,8 @@ phases:
     commands:
       - echo "Downloading reference code from S3"
       - aws s3 cp s3://testscripts-geetha/varma.txt /tmp/varma.txt
+
       - echo "Running token-based similarity check"
-      - python3 compare_code.py src/App.js /tmp/varma.txt
+      - python3 scripts/compare_code.py src/App.js /tmp/varma.txt
+
 
