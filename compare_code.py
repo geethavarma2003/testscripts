@@ -13,7 +13,6 @@ def similarity(a, b):
 
     return (len(a_tokens & b_tokens) / len(a_tokens | b_tokens)) * 100
 
-
 if len(sys.argv) != 3:
     print("Usage: python compare_code.py <repo_file> <s3_file>")
     sys.exit(1)
@@ -34,4 +33,3 @@ if score >= 70:
 else:
     print("✅ Code is acceptable (< 70%)")
     sys.exit(0)
-
